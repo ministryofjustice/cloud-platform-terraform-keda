@@ -1,3 +1,16 @@
+############################
+# Backend & Provider setup #
+############################
+provider "aws" {
+  region = "eu-west-2"
+
+  default_tags {
+    tags = var.labels
+  }
+}
+
+
+
 resource "kubernetes_namespace" "keda" {
   count = var.enable_keda ? 1 : 0
   metadata {
@@ -7,7 +20,7 @@ resource "kubernetes_namespace" "keda" {
       "component"                                      = "keda"
       "cloud-platform.justice.gov.uk/environment-name" = "production"
       "cloud-platform.justice.gov.uk/is-production"    = "true"
-      "pod-security.kubernetes.io/enforce"             = "privileged"
+      "pod-security.kubernetes.io/enforce"             = "restricted"
     }
 
     annotations = {
@@ -21,21 +34,21 @@ resource "kubernetes_namespace" "keda" {
 }
 
 resource "helm_release" "keda" {
-  count = var.enable_keda ? 1 : 0
+  # count = var.enable_keda ? 1 : 0
   name       = "keda"
-  namespace  = data.kubernetes_namespace.keda.metadata.name
+  namespace  = "keda"
   repository = "https://kedacore.github.io/charts"
-  chart      = "kedacore/keda"
+  chart      = "keda"
   version    = "v2.12.1" # v2.12.1 is the latest version for kubernetes 1.26
 
   values = [templatefile("${path.module}/templates/keda.yaml.tpl", {
     cluster_name = terraform.workspace
-    cluster_region = var.cluster_region
     operator_replica_count = var.keda_operator_replica_count
     metrics_server_replica_count = var.keda_metrics_server_replica_count
     webhook_replica_count = var.keda_webhook_replica_count
     minimum_Available = var.keda_minimum_Available
     maximum_Unavailable = var.keda_maximum_Unavailable
+    keda_operator_role_arn = data.aws_iam_role.keda-operator.arn
   })]
   depends_on = [
     kubernetes_namespace.keda

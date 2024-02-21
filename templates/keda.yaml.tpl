@@ -1,5 +1,8 @@
 clusterName: ${cluster_name}
-clusterRegion: ${cluster_region}
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${keda_operator_role_arn}
 
 operator:
   replicaCount: ${operator_replica_count}
