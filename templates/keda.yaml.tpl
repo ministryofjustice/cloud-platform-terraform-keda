@@ -11,7 +11,7 @@ metricsServer:
   replicaCount: ${metrics_server_replica_count}
 
 webhooks:
-  replicaCount: ${webhooks_replica_count}
+  replicaCount: ${webhook_replica_count}
 
 upgradeStrategy:
   operator:
@@ -76,15 +76,4 @@ permissions:
     restrict:
       # -- Restrict Secret Access for KEDA operator
       secret: true
-
-podIdentity:
-  aws:
-    irsa:
-      enabled: true
-      role:
-        arn: ""
-        name: ""
-        externalId: ""
-        policy: ""
-        policyDocument: ""
 

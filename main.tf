@@ -1,16 +1,3 @@
-############################
-# Backend & Provider setup #
-############################
-provider "aws" {
-  region = "eu-west-2"
-
-  default_tags {
-    tags = var.labels
-  }
-}
-
-
-
 resource "kubernetes_namespace" "keda" {
   count = var.enable_keda ? 1 : 0
   metadata {
@@ -29,12 +16,13 @@ resource "kubernetes_namespace" "keda" {
       "cloud-platform.justice.gov.uk/owner"         = "Cloud Platform: platforms@digital.justice.gov.uk"
       "cloud-platform.justice.gov.uk/source-code"   = "https://github.com/ministryofjustice/cloud-platform-infrastructure"
       "cloud-platform-out-of-hours-alert"           = "true"
+      
     }
   }
 }
 
 resource "helm_release" "keda" {
-  # count = var.enable_keda ? 1 : 0
+  count = var.enable_keda ? 1 : 0
   name       = "keda"
   namespace  = "keda"
   repository = "https://kedacore.github.io/charts"
@@ -46,11 +34,18 @@ resource "helm_release" "keda" {
     operator_replica_count = var.keda_operator_replica_count
     metrics_server_replica_count = var.keda_metrics_server_replica_count
     webhook_replica_count = var.keda_webhook_replica_count
-    minimum_Available = var.keda_minimum_Available
-    maximum_Unavailable = var.keda_maximum_Unavailable
-    keda_operator_role_arn = data.aws_iam_role.keda-operator.arn
+    minimum_available = var.keda_minimum_Available
+    maximum_unavailable = var.keda_maximum_Unavailable
+    keda_operator_role_arn = aws_iam_role.keda-operator.arn
   })]
   depends_on = [
     kubernetes_namespace.keda
   ]
+
+  lifecycle {
+    precondition {
+      condition     = var.keda_minimum_Available > 0 && var.keda_maximum_Unavailable > 0 ? false : true
+      error_message = "keda_minimum_Available and keda_maximum_Unavailable cannot be both set at the same time, please set one of them to 0"
+    }
+  }
 }

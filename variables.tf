@@ -36,16 +36,16 @@ variable "keda_webhook_replica_count" {
 variable "keda_minimum_Available" {
   description = "The minimum number of available pods"
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "keda_maximum_Unavailable" {
   description = "The maximum number of unavailable pods"
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "labels" {
   description = "Labels to be added to the keda namespace"
-  type        = map(string)  
+  type        = map(string)
 }
