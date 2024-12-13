@@ -27,7 +27,7 @@ resource "helm_release" "keda" {
   namespace  = "keda"
   repository = "https://kedacore.github.io/charts"
   chart      = "keda"
-  version    = "v2.16.0" # latest version compatible with k8s 1.30, 1.31
+  version    = "v2.15.0"
 
   values = [templatefile("${path.module}/templates/keda.yaml.tpl", {
     cluster_name = terraform.workspace
