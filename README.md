@@ -5,13 +5,8 @@ This module is used to deploy KEDA on the cloud platform.
 ### Kubernetes Compatibility
 |KEDA |	Kubernetes|
 |---|---|
-|v2.13	| v1.27 - v1.29|
-|v2.12	| v1.26 - v1.28|
-|v2.11	| v1.25 - v1.27|
-|v2.10	| v1.24 - v1.26|
-|v2.9	| v1.23 - v1.25|
-|v2.8	| v1.17 - v1.25|
-|v2.7	| v1.17 - v1.25|
+|v2.16 |	TBD|
+|v2.15 | v1.28 - v1.30|
 
 Link: [kubernetes compatibility](https://keda.sh/docs/2.13/operate/cluster/#kubernetes-compatibility)
 
