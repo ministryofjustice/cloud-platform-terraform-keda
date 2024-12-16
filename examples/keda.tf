@@ -3,9 +3,9 @@ module "keda" {
 
   enable_keda = true
   namespace = "keda"
-  keda_operator_replica_count = 3
-  keda_metrics_server_replica_count = 3
-  keda_webhook_replica_count = 3
+  keda_operator_replica_count = 2 # recommended to have a minimum of 2 replicas for the operator
+  keda_metrics_server_replica_count = 1 # currently only have 1 replica for metrics server as it is not recommended to have more than 1 replica see README
+  keda_webhook_replica_count = 1 # currently is the default value for the webhook replica count
   keda_minimum_Available = 1
   keda_maximum_Unavailable = 0
 

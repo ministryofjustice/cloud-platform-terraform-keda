@@ -1,3 +1,7 @@
+# chart: https://github.com/kedacore/charts/tree/v2.15.2/keda
+# version: 2.15.2
+# values: https://github.com/kedacore/charts/tree/v2.15.2/keda/values.yaml
+
 clusterName: ${cluster_name}
 
 serviceAccount:
@@ -76,4 +80,3 @@ permissions:
     restrict:
       # -- Restrict Secret Access for KEDA operator
       secret: true
-
