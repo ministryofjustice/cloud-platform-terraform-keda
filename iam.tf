@@ -1,6 +1,6 @@
 # keda operator iam role
 resource "aws_iam_role" "keda-operator" {
-  name               = "keda-operator"
+  name               = "keda-operator-${terraform.workspace}"
   assume_role_policy = data.aws_iam_policy_document.keda-operator-trust-policy.json
 }
 data "aws_iam_policy_document" "keda-operator-trust-policy" {
